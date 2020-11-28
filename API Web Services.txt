@@ -1,0 +1,113 @@
+What is a Web Service:
+Web Service - service available over the web
+   - enables communication between applications over the web
+   - provides a standard protocol/format for communication
+Why we use it:
+   - platform independent communication
+   - using web services two different applications (implementation)  can talk to each other and exchange data/information
+
+
+Web Services uses HTTP as medium and XML/JSON format to communicate
+
+Web Services are implemented in two types:-
+
+1. SOAP- Simple Object Access Protocol
+    Medium: HTTP(POST),SMTP,TCP,UDP
+    Format: XML
+
+2. REST - Representational State Transfer
+   Medium: HTTP(POST,GET,PUT,DELETE)
+   Format: XML/JSON/TEXT
+   More flexible than soap
+
+
+Components of Web Services:-
+
+1. WSDL
+   Web Services Description Language is an XML based interface that is used to describe 
+   functionalities of web services. 
+
+2. UDDI
+   A web service provider publishes his web service on an online directory from where consumers can query and search
+   the web services. This online registry/directory is called UDDI.
+    
+   Universal Description, Discovery and Integration is an XML based standard for publishing and finding web services.
+ 		
+Web Service consumer needs to know following things:-
+1. What are the services available?
+2. What are the request and response parameters?
+3. How to call the web service?
+
+
+SOAP Web Services 
+
+A web service that complies to the SOAP Web services specifications is a SOAP Web Service.
+
+SOAP Web services specifications
+1. BASIC
+  1.1 SOAP
+  1.2 WSDL
+  1.3 UDDI
+
+2. EXTENDED
+
+2.1 WS-Security
+2.2 WS-Policy
+2.3 WS-I
+ 
+In these type of services:-
+1. All information/message exchange happens over a common format: XML
+2. XML messages have a defined structure: SOAP MESSAGE
+3. SOAP MESSAGE consists of Envelope, Header and Body
+
+
+A web service that communicates/exchanges information between two applications using REST Architecture/principles is called 
+a RESTful web service.
+
+Priniciple/constraints of REST architecture
+1. Uniform Interface
+2. Stateless
+3. Cacheable
+4. Layered System
+5. Code on Demand
+ 
+Uniform Interface
+1. Resource: everything is a resource
+2. URI: any resource/data can be accessed by a URI
+3. HTTP: make explicit use of HTTP methods
+
+Each resource has a URI and is accessed through a defined set of HTTP methods( GET,PUT,POST,DELETE )
+
+Manipulations of Resources using Representations
+Each resource can have one or more representations. Such as application/xml, application/json, text/html etc.
+Client and servers negotiate to select represenations.
+
+Self descriptive messages 
+Requests and responses contain not only data but additional headers describing how the content should be handled.
+Such as if it should be cached, authentication requirements, etc.
+
+
+2. Stateless
+all client-server communications are stateless. Each request from client to server must contain all data that is necessary to handle the request.
+No need of storing any state on the server
+
+
+3. Caching
+Server generates a response that indicate whether they are cacheable or not to improve performance by reducing number of requests for duplicate resources.
+
+Server does this by including a Cache-control and Last-modified(date value) in HTTP response headers.
+Client uses the Cache-Control header to determine whether to cache the resource or not.
+
+4. Layering
+
+multiple layers can exist between client and server
+There can be many layers(intermediaries) which are called HTTP intermediaries which can be used for message transalation/ improving performance with 
+caching etc.
+Can include proxies and gateways
+
+Proxies are chosen by client
+Gateways are chosen by server
+
+Code on demand: ability to download and execute code at client side
+
+REPRESENATTION: description of the current state of the resource

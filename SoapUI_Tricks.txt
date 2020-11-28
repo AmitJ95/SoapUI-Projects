@@ -1,0 +1,128 @@
+Groovy
+
+//Groovy - run request from same TestCase
+def status = testRunner.runTestStepByName("TestStepName")
+def result = status.getStatus().toString();
+log.info ("   ---- "+result)
+
+//Groovy - run request from another TestCase or TestSuite
+project = testRunner.testCase.testSuite.project ;
+tcase = project.testSuites["TestSuiteName"].testCases["TestCaseName"] ; 
+tstep = tcase.getTestStepByName("TestStepName");
+def status = tstep.run(testRunner, context)
+def result = status.getStatus().toString();
+log.info ("   ----   "+result)
+
+//Groovy - run request from another TestCase
+def tcase = testRunner.testCase.testSuite.testCases["TestCaseName"] ;
+tstep = tcase.getTestStepByName("TestStepName");
+def status = tstep.run(testRunner, context)
+def result = status.getStatus().toString();
+log.info ("   ----   "+result)
+
+
+groovy code to loop test cases in a test suite
+==================================
+def testCases = context.testCase.testSuite.getTestCaseList() 
+testCases.each{
+log.info(it.name)
+}
+
+How to get list of all TCs in a test suite
+Get TestCaseName - testRunner.testCase.name
+
+Groovy script to run a test suite from another test suite
+-------------------
+def suite = context.testCase.testSuite.project.testSuites["TestSuiteName"]
+suite.run(null,false)
+// null can be replaced with : new com.eviware.soapui.support.types.StringToObjectMap()
+log.info ("   ===   "+suite.getName().toString()+" - Executed successfully")
+
+Setup - runs before running the element in context
+Teardown - runs after running the element in context
+
+element in context means if we are setting upa setup script at test suite level then it will run before that 
+test suite is executed.
+
+groovy code to set and get setup and teardown scripts 
+--------------------------------------------------------------------------
+testRunner.testCase.testSuite.project.getTestSuiteByName('TestSuite1').getTestCaseByName('TestCase1').setSetupScript('log.info "setup"')
+testRunner.testCase.testSuite.project.getTestSuiteByName('TestSuite1').getTestCaseByName('TestCase1').setTearDownScript('log.info "teardown"')
+
+log.info ("  --  "+testRunner.testCase.getSetupScript());
+log.info ("  --  "+testRunner.testCase.getTearDownScript());
+
+
+groovy code can be given at project load script to load setup and teardown scritps from file
+--------------------------------------------------------------------------------------------------------------------------
+def su = new File("setup.txt").text
+def td  = new File("teardown.txt").text
+
+project.getTestSuiteList().each { testSuite -
+ testSuite.getTestCaseList().each { testCase -
+  testCase.setSetupScript(su)
+  testCase.setTearDownScript(td)
+ }
+}
+
+
+Script assertion works on the last reponse received in soapui
+works with messageExchange object
+(messageExchange object stores all the details of the last request and response)
+
+
+Script Assertion samples
+=====================
+
+//check response time
+assert messageExchange.timeTaken  4000
+
+//check for Endpoint
+ log.info messageExchange.getEndpoint() 
+
+//check for TimeTaken
+ log.info messageExchange.getTimeTaken()  
+
+//check for header
+log.info (messageExchange.responseHeaders["Content-Length"])
+assert messageExchange.responseHeaders["Content-Length"] != null
+
+//check attachments
+assert messageExchange.responseAttachments.length == 0
+log.info (messageExchange.responseAttachments.length)
+
+//validate response nodes
+def groovyUtils = new com.eviware.soapui.support.GroovyUtils( context )
+def requsetHolder = groovyUtils.getXmlHolder( messageExchange.requestContent )
+def responseHolder = groovyUtils.getXmlHolder( messageExchange.responseContent )
+def refNum = responseHolder.getNodeValue("//m:CountryCurrencyResult/m:sName")
+assert responseHolder.getNodeValue("//m:CountryCurrencyResult/m:sName") == "Rupees"
+
+//to get response
+def resp = messageExchange.responseContentAsXml.toString()
+
+
+For JSON response
+-------------------------------
+
+//get json response
+import groovy.json.JsonSlurper
+def responseMessage = messageExchange.response.responseContent
+def json = new JsonSlurper().parseText(responseMessage)
+
+//assert node values
+log.info json.name
+assert json.capital.toString() != null
+assert json.name.toString() == "[Taiwan]"
+
+testStepName = messageExchange.modelItem.testStep.name//to get the Test Step Name
+log.info testStepName
+xmlHold = messageExchange.responseContentAsXml.toString()  //to store the response as Xml string
+
+
+
+cd D:\Amit\Front-End\SmartBear\SoapUI-5.5.0\bin\.
+testrunner.bat -s"TestSuite 1" -cAssertions D:\Amit\Front-End\SoapUI\REST-Project-1-soapui-project.xml
+
+API Monitor account: amitasn@gmail.com
+password: rest@1234
